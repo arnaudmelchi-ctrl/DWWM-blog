@@ -1,0 +1,105 @@
+1 ça me propose une liste de commande pour exécuter diverses tâches
+
+2 les 3 famille que j’observe sont make, migrate et schedule
+
+3 Laravel m’affiche une liste détaillée des options disponibles pour générer un modèle.
+
+4 Pour voir la liste de toutes les routes définies dans mon projet laravel la commande à taper est : php artisan route:list 
+
+Exercice 2
+1 serveur lancé 
+
+2 ça affiche cet url dans le terminal:http://127.0.0.1:8000/
+
+3 A chaque chargement de page ça affiche la date l’heure etc
+
+4 non pour taper des commandes en parallèle il faut ouvrir un second terminal dans VS code ou arrêter le serveur temporairement
+
+5 la commande c’est CTRL + C
+
+Exercice 3
+
+1 Article.php est crée dans le dossier app/Models/.
+ArticleControllers.php est crée dans le dossier app/Http/Controllers/
+
+2 par défaut , le fichier contint la déclaration du namespace, l’importation de la classe Model de Laravel, et une classe Article qui hérite (extends) cette classe Model.
+Ce code est généré pour respecter les conventions de Laravel. Si le fichier était vide, il faudrait importer manuellement la classe parente et définir sa structure à chaque fois.Cela permet d’etre opérationnel immédiatement pour utiliser les fonctionalités d’éloquent qui est l’ORM de Laravel.
+Le namespace déclaré en haut du fichier est une sort d’adresse logique pour la classe.
+Il permet à laravel et a php de localiser précisément ou se trouve  la classe dans l’arborescence du projet.Cela permet d’éviter les conflits de nommage dans le cas ou on aurait deux classes nommées Article dans des dossiers différents, le namespace permet à php de savoir exactement laquelle on appelle.C’est pourquoi il est fortement déconseilé de créer ces fichiers manuellement ou de déplacer les dossiers, car on risquerais de briser cette structure  logique.
+
+Exercice 4
+1 Exécuter toutes ls migrations en attente : php artisan migrate
+
+2 Annuler la dernière migration :php artisan migrate:rollback
+
+3 migrate:rollback annule uniquement la dernière opération (ou groupe d’opération) de migration. Les autres tables restes intactes.
+Migrate fresh: supprime toutes les tables de la base de données et relance toutes les mirations depuis le début. C’est une remise à zéro totale.
+
+4 Recréer les tables et peupler avec les seeders: php artisan migrate:fresh--seed
+Partie A — Questions théoriques
+Exécuter toutes les migrations en attente : php artisan migrate
+
+Annuler la dernière migration : php artisan migrate:rollback
+
+Différence entre migrate:rollback et migrate:fresh :
+
+migrate:rollback annule uniquement la dernière opération (ou groupe d'opérations) de migration. Les autres tables restent intactes.
+
+migrate:fresh supprime toutes les tables de la base de données et relance toutes les migrations depuis le début. C'est une remise à zéro totale.
+
+Recréer les tables et peupler avec les seeders : php artisan migrate:fresh --seed
+
+Partie B — Mise en situation
+Scénario 1 (Ajout d'une colonne slug) :
+
+Commande : php artisan make:migration add_slug_to_articles_table --table=articles puis php artisan migrate.
+
+Pourquoi : On ne modifie jamais une migration déjà exécutée. On crée une nouvelle migration qui modifie la table existante. Cela permet de garder un historique des changements et d'appliquer la modification proprement sur les machines des autres développeurs.
+
+Scénario 2 (Alerte sur migrate:fresh --seed en production) :
+
+Réponse : "Attention, on ne fait jamais cela en production !"
+
+Pourquoi : migrate:fresh supprime toutes les données existantes de la base de données. Si tu lances cette commande sur le blog en production, tu effaces définitivement tous les articles, commentaires et comptes utilisateurs. En production, on utilise uniquement php artisan migrate pour appliquer les nouveaux changements.
+
+Partie C — Pratique
+php artisan migrate : Laravel crée les tables définies dans tes fichiers de migration, plus une table supplémentaire nommée migrations (qui sert à Laravel pour garder l'historique de ce qui a été exécuté).
+
+php artisan migrate:rollback : La dernière migration est annulée : les tables associées à ce fichier sont supprimées de la base de données. La table migrations est mise à jour pour retirer l'entrée correspondante.
+
+php artisan migrate à nouveau : La migration est rejouée et la table est recréée. Non, les données ne sont pas récupérées. Lors du rollback, le contenu des tables est supprimé définitivement. La nouvelle migration recrée une table vide, prête à être remplie.
+
+Exercice 5
+
+scénario                    cause probable                     commande à utiliser
+
+Scénario 1(.env ignoré)     La configuration est               php artisan
+                            mise en cache.Laravel              config:clear
+                            utilise la version
+                            compilée
+                            (bootstrap/cache/c
+                            onfig.php)au lieu de
+                            de lire le .env .
+
+scénario 2 (route 404)      Les routes sont mises en cache     php artisan     
+                            Laravel ignore le fichier          route:clear
+                            routes/web.php pour utiliser 
+                            la version optimisée.
+
+scénario 3 (base propre)    Accumulaton de cache divers        php artisan 
+                            (config,routes,vues,application).  config:clear
+
+                                                               php artisan
+                                                               route:clear                      
+
+                                                               php artisan
+                                                               cache:clear
+
+                                                               php artisan
+                                                               view:clear
+
+Non, les deux n'ont absolument pas le même effet.
+
+Redémarrer le serveur (Ctrl + C + php artisan serve) : Cela redémarre le processus PHP qui "écoute" les requêtes. C'est utile si tu as modifié un fichier de configuration PHP, mais cela ne vide pas les fichiers de cache générés par Laravel dans le dossier bootstrap/cache/.
+
+Vider les caches (php artisan ...:clear) : Ces commandes vont physiquement supprimer les fichiers générés par Laravel (les versions "compilées" de tes routes ou de ta configuration). Une fois ces fichiers supprimés, Laravel est obligé de relire tes fichiers source (.env, routes/web.php, etc.) lors de la prochaine requête.
