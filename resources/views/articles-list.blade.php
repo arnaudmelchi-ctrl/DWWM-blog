@@ -7,6 +7,14 @@
     <title>Document</title>
 </head>
 <body>
-    <p>Articles List !</p>
+    <h1>Articles List !</h1>
+
+    @foreach ($articles as $article)
+        <div>
+            <h2>{{ $article->title }}</h2>
+            <p>{{ $article->content }}</p>
+        </div>
+        
+    @endforeach
 </body>
 </html>

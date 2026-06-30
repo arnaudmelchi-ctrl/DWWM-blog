@@ -9,6 +9,6 @@ Route::get('/', function () {
     return view('home');
 });
 
-Route::get('/articles', [ArticleController::class, 'show']);
+Route::get('/articles', [ArticleController::class, 'index']);
 
 Route::get('/categories', [CategoryController::class, 'index']);
