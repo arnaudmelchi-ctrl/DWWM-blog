@@ -19,6 +19,12 @@ return new class extends Migration
             $table->string('slug',255)->unique();
             $table->timestamp('published_at')->nullable();
             $table->enum('status', ['draft', 'published'])->default('draft');
+            $table->foreignId('category_id')
+            ->constrained()
+            ->restrictOnDelete();
+            $table->foreignId('user_id')
+            ->constrained()
+            ->restrictOnDelete();
         });
     }
 
