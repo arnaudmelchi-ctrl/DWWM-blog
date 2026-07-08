@@ -13,6 +13,8 @@
         <div>
             <h2>{{ $article->title }}</h2>
             <p>{{ $article->content }}</p>
+            <p>Catégorie :{{$article->category->name}}</p>
+            <p>Author :{{$article->user->name}}</p>
         </div>
         
     @endforeach
