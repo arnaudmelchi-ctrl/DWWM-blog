@@ -12,3 +12,5 @@ Route::get('/', function () {
 Route::get('/articles', [ArticleController::class, 'index']);
 
 Route::get('/categories', [CategoryController::class, 'index']);
+
+Route::get('/articles/admin', [ArticleController::class, 'adminIndex']);

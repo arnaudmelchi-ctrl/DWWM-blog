@@ -8,15 +8,18 @@ use Illuminate\View\View;
 
 class ArticleController extends Controller
 {
-    public function show():View{
-        return view('articles-list');
-    }
+    
 
     public function index () {
-        $articles = Article::all();
+        $articles = Article::with(['category', 'user'])->get();
 
-        return view('articles-list',[
-            'articles' => $articles]);
+        return view('articles-list',compact('articles'));
+    }
+
+    public function adminIndex () {
+        $articles = Article::with(['category', 'user'])->get();
+
+        return view('articles-admin-list',compact('articles'));
     }
 }
 
