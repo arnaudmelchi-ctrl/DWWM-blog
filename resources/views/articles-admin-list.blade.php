@@ -6,8 +6,11 @@
     <title>Document</title>
 </head>
 <body>
+   @extends('layouts.app')      
+   @section('content')
 
     <div class="auth-bar">
+        
         <span>
             Dashboard admin 
         </span>
@@ -51,5 +54,6 @@
         <span class="page-info">Page 1/2</span>
         <button class="btn-pagination">Suivant -</button>
     </div> 
+    @endsection('content')
 </body>
 </html>

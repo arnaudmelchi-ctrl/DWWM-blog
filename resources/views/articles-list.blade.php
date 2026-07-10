@@ -7,12 +7,12 @@
     <title>Document</title>
 </head>
 <body>
+     
 
-    <div class="auth-bar">
-        <a href="#" class="auth-link">Se connecter</a>
-        <a href="#" class="auth-link">S'inscrire</a>
-    </div>
-
+        @extends('layouts.app')
+        
+        
+        @section('content')
     <h1>Articles</h1>
 
     <div class="filters-section">
@@ -51,6 +51,6 @@
         <span class="page-info">Page 1/4</span>
         <button class="btn-pagination">Suivant -</button>
     </div>
-
+    @endsection('content')
 </body>
 </html>
