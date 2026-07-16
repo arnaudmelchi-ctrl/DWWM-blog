@@ -8,19 +8,26 @@ use Illuminate\View\View;
 
 class ArticleController extends Controller
 {
-    
+    public function index()
+    {
+        $articles = Article::with(['category', 'user'])->paginate(1);
+        return view('articles-list', compact('articles'));
 
-    public function index () {
-        $articles = Article::with(['category', 'user'])->get();
-
-        return view('articles-list',compact('articles'));
     }
 
-    public function adminIndex () {
-        $articles = Article::with(['category', 'user'])->get();
+    public function adminIndex(): View 
+    {
+        $articles = Article::with(['category', 'user'])->paginate(1);
 
-        return view('articles-admin-list',compact('articles'));
+        return view('articles-admin-list', compact('articles'));
+    }
+
+    public function show($id): View
+    {
+        $article = Article::with(['category', 'user'])->findOrFail($id);
+
+        // Correction : "articles-detail" avec un "s"
+        return view('articles-detail', compact('article'));
     }
 }
-
 

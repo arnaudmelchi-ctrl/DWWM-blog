@@ -54,6 +54,6 @@
                 <p class="article-excerpt">{{ $article->content }}</p>
 
                 <div class="article-footer">
-                    <a href="#" class="read-more">Lire -></a>
+                    <a href="{{ route('articles.show', $article->id) }}" class="read-more">Lire →</a>
                 </div>
             </div>

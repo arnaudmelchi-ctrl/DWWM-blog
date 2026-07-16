@@ -19,9 +19,25 @@
         @endforeach
     </div>
 
+    <style>
+        /* Cible absolument tous les SVG de la pagination */
+        .pagination-container svg,
+        nav svg,
+        .flex svg {
+            width: 20px !important;
+            height: 20px !important;
+            display: inline-block !important;
+            max-width: 20px !important;
+            max-height: 20px !important;
+        }
+        
+        /* Cache le gros texte encombrant de Tailwind si besoin */
+        nav p.text-sm {
+            display: none !important;
+        }
+    </style>
+
     <div class="pagination-container">
-        <button class="btn-pagination">- Précédent</button>
-        <span class="page-info">Page 1/4</span>
-        <button class="btn-pagination">Suivant -</button>
+        {{ $articles->links() }}
     </div>
 @endsection

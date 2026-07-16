@@ -15,6 +15,8 @@ Route::get('/categories', [CategoryController::class, 'index']);
 
 Route::get('/articles/admin', [ArticleController::class, 'adminIndex']);
 
+Route::get('/article/details/{id}', [ArticleController::class, 'show'])->name('articles.show');
+
 // Route pour afficher le formulaire d'édition
 Route::get('/categories/{category}/edit', [CategoryController::class, 'edit'])->name('categories.edit');
 
