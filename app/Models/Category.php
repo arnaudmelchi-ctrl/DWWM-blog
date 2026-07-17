@@ -13,7 +13,7 @@ class Category extends Model {
     {
         return $this->hasMany(Article::class);
     }
-
+    protected $fillable = ['name', 'slug'];
 }
 
 
