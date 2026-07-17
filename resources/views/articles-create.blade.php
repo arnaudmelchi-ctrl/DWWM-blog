@@ -118,7 +118,9 @@
         font-size: 0.75rem;
     }
 </style>
-
+<p style="background: #fee2e2; color: #991b1b; padding: 0.5rem; border-radius: 0.25rem;">
+    Le statut actuel en BDD est : <strong>"{{ isset($article) ? $article->status : 'Aucun (Création)' }}"</strong>
+</p>
 <div class="form-container">
     
     <!-- Bouton Retour à la liste -->
@@ -156,7 +158,7 @@
                    class="form-input" required>
         </div>
 
-        <!-- Choix de la Catégorie (Correction du nom pour correspondre au contrôleur : id_category) -->
+        <!-- Choix de la Catégorie -->
         <div class="form-group">
             <label for="id_category" class="form-label">Catégorie *</label>
             <select name="id_category" id="id_category" class="form-select" required>
@@ -190,18 +192,18 @@
             <textarea name="content" id="content" rows="8" class="form-textarea" required>{{ old('content', $article->content ?? '') }}</textarea>
         </div>
 
-        <!-- Statut de l'article (Correction des valeurs pour correspondre aux majuscules du contrôleur) -->
+        <!-- Statut de l'article (CORRIGÉ EN MINUSCULES) -->
         <div class="form-group">
             <span class="form-label">Statut *</span>
             <div class="radio-group">
                 <label class="radio-label">
-                    <input type="radio" name="status" value="DRAFT" class="radio-input"
-                        {{ old('status', $article->status ?? 'DRAFT') === 'DRAFT' ? 'checked' : '' }}>
+                    <input type="radio" name="status" value="draft" class="radio-input"
+                        {{ old('status', isset($article) ? $article->status : 'draft') === 'draft' ? 'checked' : '' }}>
                     <span>Brouillon</span>
                 </label>
                 <label class="radio-label">
-                    <input type="radio" name="status" value="PUBLISHED" class="radio-input"
-                        {{ old('status', $article->status ?? '') === 'PUBLISHED' ? 'checked' : '' }}>
+                    <input type="radio" name="status" value="published" class="radio-input"
+                        {{ old('status', isset($article) ? $article->status : '') === 'published' ? 'checked' : '' }}>
                     <span>Publié</span>
                 </label>
             </div>

@@ -40,7 +40,7 @@ HTML
                     <td>{{ $article->title }}</td>
                     <td>{{ $article->category->name }}</td>
                     {{-- Correction ici : On compare avec les majuscules PUBLISHED --}}
-                    @if ($article->status === 'PUBLISHED')
+                    @if ($article->status === 'published')
                         <td><span class="status-badge published">Publié</span></td>
                     @else
                         <td><span class="status-badge draft">Brouillon</span></td>

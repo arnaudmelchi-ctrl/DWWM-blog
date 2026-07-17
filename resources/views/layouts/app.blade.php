@@ -29,11 +29,48 @@
         /* Contenu */
         main { padding: 40px 50px; }
 
-        <style>
-    /* ... le reste de votre CSS ... */
+        /* ==========================================
+           STYLE DES BADGES DE STATUT (NOUVEAU)
+        ========================================== */
+        .status-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px; /* Espace entre le point et le texte */
+            padding: 4px 12px;
+            border-radius: 9999px; /* Donne une forme de pilule bien arrondie */
+            font-size: 0.85rem;
+            font-weight: bold;
+        }
 
-    
-</style>
+        /* Style pour "Publié" */
+        .status-badge.published {
+            background-color: #dcfce7; /* Fond vert clair */
+            color: #15803d; /* Texte vert foncé */
+        }
+        /* Le petit point vert */
+        .status-badge.published::before {
+            content: "";
+            display: inline-block;
+            width: 8px;
+            height: 8px;
+            background-color: #16a34a; /* Couleur du point vert */
+            border-radius: 50%;
+        }
+
+        /* Style pour "Brouillon" */
+        .status-badge.draft {
+            background-color: #f3f4f6; /* Fond gris clair */
+            color: #4b5563; /* Texte gris foncé */
+        }
+        /* Le petit point gris */
+        .status-badge.draft::before {
+            content: "";
+            display: inline-block;
+            width: 8px;
+            height: 8px;
+            background-color: #9ca3af; /* Couleur du point gris */
+            border-radius: 50%;
+        }
     </style>
 </head>
 <body>
