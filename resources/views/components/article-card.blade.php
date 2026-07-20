@@ -92,7 +92,7 @@
             {{-- Boucle pour afficher les vrais tags de l'article --}}
             @foreach($article->tags as $tag)
                 <span class="tag-item">#{{ $tag->name }}</span>
-            @@endforeach
+            @endforeach
         </div>
         
         <span class="article-date">{{ $article->created_at->format('d M. Y') }}</span>
