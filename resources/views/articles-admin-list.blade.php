@@ -48,13 +48,13 @@
                     <td class="actions-cell">
                         <a href="{{ route('admin.articles.edit', $article->slug) }}" class="btn btn-edit">✏️</a>
                         
-                        <form action="{{ route('admin.articles.destroy', $article->slug) }}" method="POST" style="display: inline;">
+                        <form action="{{ route('admin.articles.destroy', $article->id) }}" method="POST" style="display: inline;">
                             @csrf
                             @method('DELETE')
                             <button type="submit" class="btn btn-delete" onclick="return confirm('Êtes-vous sûr de vouloir supprimer cet article ?')">❌</button>
                         </form>
                         
-                        <a href="{{ route('articles.show', $article->slug) }}" class="btn btn-view">➔</a>
+                        <a href="{{ route('articles.show', $article->id) }}" class="btn btn-view">➔</a>
                     </td>
                 </tr>
             @endforeach

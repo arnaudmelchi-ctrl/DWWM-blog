@@ -41,5 +41,5 @@ Route::get('/admin/articles/{slug}/modifier', [ArticleController::class, 'edit']
 Route::put('/admin/articles/{slug}', [ArticleController::class, 'update'])->name('admin.articles.update');
 
 // 6. Action de suppression de l'article (Écran 6)
-Route::delete('/admin/articles/{slug}', [ArticleController::class, 'destroy'])->name('admin.articles.destroy');
+Route::delete('/admin/articles/{id}', [ArticleController::class, 'destroy'])->name('admin.articles.destroy');
 

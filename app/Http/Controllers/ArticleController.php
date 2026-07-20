@@ -118,9 +118,9 @@ class ArticleController extends Controller
             ->with('success', 'L\'article a bien été modifié !');
     }
 
-    public function destroy(string $slug)
+    public function destroy(int $id)
     {
-        $article = Article::where('slug', $slug)->firstOrFail();
+        $article = Article::findOrFail($id);
         $article->delete();
 
         return redirect()->route('admin.articles.index')
