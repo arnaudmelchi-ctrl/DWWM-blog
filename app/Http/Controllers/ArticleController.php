@@ -1,0 +1,129 @@
+<?php
+
+namespace App\Http\Controllers;
+
+use App\Models\Category;
+use App\Models\Tag;
+use App\Models\Article;
+use Illuminate\Http\Request;
+use Illuminate\View\View;
+use Illuminate\Support\Str;
+
+class ArticleController extends Controller
+{
+    public function index()
+    {
+        $articles = Article::with(['category', 'user'])->paginate(1);
+        return view('articles-list', compact('articles'));
+    }
+
+    public function adminIndex(): View 
+    {
+        $articles = Article::with(['category', 'user'])->paginate(1);
+        return view('articles-admin-list', compact('articles'));
+    }
+
+    public function show(string $slug): View
+    {
+        $article = Article::with(['category', 'user'])->where('slug', $slug)->firstOrFail();
+        return view('articles-detail', compact('article'));
+    }
+
+    public function create()
+    {
+        $categories = Category::all();
+        $tags = Tag::all();
+        return view('articles-create', compact('categories', 'tags'));
+    }
+
+    /**
+     * Enregistrer un nouvel article
+     */
+    public function store(Request $request)
+    {
+        $validated = $request->validate([
+            'title' => 'required|string|max:255',
+            'slug' => 'required|string|max:100|unique:articles,slug',
+            'content' => 'required|string',
+            'id_category' => 'required|exists:categories,id',
+            'status' => 'required|in:draft,published', // CORRIGÉ EN MINUSCULES
+            'tags' => 'nullable|array',
+            'tags.*' => 'exists:tags,id',
+        ]);
+
+        $article = new Article();
+        $article->title = $validated['title'];
+        $article->slug = Str::slug($validated['slug']);
+        $article->content = $validated['content'];
+        $article->status = $validated['status'];
+        $article->category_id = $validated['id_category']; 
+        $article->user_id = auth()->id() ?? 1; 
+
+        if ($validated['status'] === 'published') {
+            $article->published_at = now();
+        }
+
+        $article->save();
+
+        $article->tags()->sync($validated['tags'] ?? []); 
+
+        return redirect()->route('admin.articles.index')
+            ->with('success', 'L\'article a bien été créé !');
+    }
+
+    public function edit(string $slug)
+    {
+        $article = Article::with('tags')->where('slug', $slug)->firstOrFail();
+        $categories = Category::all();
+        $tags = Tag::all();
+
+        return view('articles-create', compact('article', 'categories', 'tags'));
+    }
+
+    /**
+     * Mettre à jour l'article existant
+     */
+    public function update(Request $request, string $slug)
+    {
+        $article = Article::where('slug', $slug)->firstOrFail();
+
+        $validated = $request->validate([
+            'title' => 'required|string|max:255',
+            'slug' => 'required|string|max:100|unique:articles,slug,' . $article->id,
+            'content' => 'required|string',
+            'id_category' => 'required|exists:categories,id',
+            'status' => 'required|in:draft,published', // CORRIGÉ EN MINUSCULES
+            'tags' => 'nullable|array',
+            'tags.*' => 'exists:tags,id',
+        ]);
+
+        $article->title = $validated['title'];
+        $article->slug = Str::slug($validated['slug']);
+        $article->content = $validated['content'];
+        $article->category_id = $validated['id_category']; 
+
+        // Gestion de la date de publication
+        if ($validated['status'] === 'published' && $article->status !== 'published') {
+            $article->published_at = now();
+        } elseif ($validated['status'] === 'draft') {
+            $article->published_at = null;
+        }
+
+        $article->status = $validated['status'];
+        $article->save();
+
+        $article->tags()->sync($validated['tags'] ?? []);
+
+        return redirect()->route('admin.articles.index')
+            ->with('success', 'L\'article a bien été modifié !');
+    }
+
+    public function destroy(int $id)
+    {
+        $article = Article::findOrFail($id);
+        $article->delete();
+
+        return redirect()->route('admin.articles.index')
+            ->with('success', 'L\'article a bien été supprimé !');
+    }
+}

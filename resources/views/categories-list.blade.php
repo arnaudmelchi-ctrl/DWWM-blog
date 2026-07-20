@@ -1,17 +1,30 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Document</title>
-</head>
-<body>
-    <h1>Liste des catégories</h1>
-    <ul>
+<table class="table">
+    <thead>
+        <tr>
+            <th>Nom</th>
+            <th>Articles</th>
+            <th>Date de création</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
         @foreach ($categories as $category)
-            <li>{{ $category->name }}</li>
+        <tr>
+            <td>{{ $category->name }}</td>
+            <td>{{ $category->articles->count() }}</td>
+            <td>{{ $category->created_at->format('d/m/Y') }}</td>
+            <td>
+                <a href="{{ route('categories.edit', $category->id) }}">
+                    ✏️ </a>
+                
+                <form action="{{ route('categories.destroy', $category->id) }}" method="POST" style="display:inline;">
+                    @csrf
+                    @method('DELETE')
+                    <button type="submit" style="border:none; background:none; cursor:pointer;">
+                        ❌ </button>
+                </form>
+            </td>
+        </tr>
         @endforeach
-    </ul>
-</body>
-</html>
+    </tbody>
+</table>
