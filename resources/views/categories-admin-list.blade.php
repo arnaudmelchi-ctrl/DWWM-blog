@@ -51,6 +51,7 @@
             font-size: 0.85rem;
             font-weight: bold;
         }
+        /* Message de succès (Vert) */
         .alert-success {
             background-color: #dcfce7;
             color: #15803d;
@@ -59,12 +60,28 @@
             margin-bottom: 20px;
             font-weight: bold;
         }
+        /* Message d'erreur (Rouge) */
+        .alert-error {
+            background-color: #fee2e2;
+            color: #991b1b;
+            padding: 12px;
+            border-radius: 6px;
+            margin-bottom: 20px;
+            font-weight: bold;
+        }
     </style>
 
-    {{-- Message flash de succès --}}
+    {{-- Message flash de succès (Vert) --}}
     @if (session('success'))
         <div class="alert-success">
             {{ session('success') }}
+        </div>
+    @endif
+
+    {{-- Message flash d'erreur (Rouge) --}}
+    @if (session('error'))
+        <div class="alert-error">
+            {{ session('error') }}
         </div>
     @endif
 
@@ -87,7 +104,6 @@
                     <td><strong>{{ $category->name }}</strong></td>
                     <td>
                         <span class="badge-count">
-                            {{-- Méthode recommandée par ta prof : --}}
                             {{ $category->articles->count() }} {{ Str::plural('article', $category->articles->count()) }}
                         </span>
                     </td>

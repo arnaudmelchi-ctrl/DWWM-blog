@@ -97,12 +97,20 @@ class CategoryController extends Controller
             ->with('success', 'La catégorie a été modifiée avec succès !');
     }
 
-    /**
+/**
      * Back-Office : Action de suppression.
      */
     public function destroy(int $id): RedirectResponse
     {
         $category = Category::findOrFail($id);
+
+        // 1. Vérification : est-ce que la catégorie contient des articles ?
+        if ($category->articles()->exists()) {
+            return redirect()->route('admin.categories.index')
+                ->with('error', 'Impossible de supprimer cette catégorie car elle contient des articles reliés !');
+        }
+
+        // 2. Si aucun article n'est relié, on supprime
         $category->delete();
 
         return redirect()->route('admin.categories.index')
