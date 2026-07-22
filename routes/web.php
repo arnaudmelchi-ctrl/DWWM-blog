@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\ArticleController;
+use App\Http\Controllers\RegisterController;
 
 /*
 |--------------------------------------------------------------------------
@@ -52,3 +53,12 @@ Route::put('/admin/categories/{category}', [CategoryController::class, 'update']
 
 // 4. Suppression
 Route::delete('/admin/categories/{category}', [CategoryController::class, 'destroy'])->name('admin.categories.destroy');
+
+
+
+
+// Route GET : Affiche la page du formulaire
+Route::get('/register', [RegisterController::class, 'create'])->name('register');
+
+// Route POST : Traite la soumission du formulaire
+Route::post('/register', [RegisterController::class, 'store']);
