@@ -14,11 +14,9 @@ class Article extends Model
     protected $fillable = ['title', 'slug', 'content', 'status', 'id_category'];
 
     public function category(): BelongsTo
-    {
-        // Si ta colonne en BDD s'appelle category_id, laisse comme ça. 
-        // Si elle s'appelle id_category, change pour : return $this->belongsTo(Category::class, 'id_category');
-        return $this->belongsTo(Category::class);
-    }
+{
+    return $this->belongsTo(Category::class, 'id_category');
+}
 
     public function user(): BelongsTo
     {

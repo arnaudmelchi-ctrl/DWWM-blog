@@ -3,6 +3,9 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\ArticleController;
+use App\Http\Controllers\RegisterController;
+use App\Http\Controllers\LoginController;
+use App\Http\Middleware\IsAdmin; // 👈 Import du middleware
 
 /*
 |--------------------------------------------------------------------------
@@ -18,37 +21,50 @@ Route::get('/', function () {
 Route::get('/articles', [ArticleController::class, 'index'])->name('articles.index');
 Route::get('/articles/{slug}', [ArticleController::class, 'show'])->name('articles.show');
 
-// Catégories (Vue publique si vous affichez la liste des catégories aux visiteurs)
+// Catégories
 Route::get('/categories', [CategoryController::class, 'index'])->name('categories.index');
 
 
 /*
 |--------------------------------------------------------------------------
-| ROUTES ADMINISTRATION (BACK-OFFICE)
+| AUTHENTIFICATION
 |--------------------------------------------------------------------------
 */
 
-// --- ESPACE ADMIN : ARTICLES ---
-Route::get('/admin/articles', [ArticleController::class, 'adminIndex'])->name('admin.articles.index');
-Route::get('/admin/articles/creer', [ArticleController::class, 'create'])->name('admin.articles.create');
-Route::post('/admin/articles', [ArticleController::class, 'store'])->name('admin.articles.store');
-Route::get('/admin/articles/{slug}/modifier', [ArticleController::class, 'edit'])->name('admin.articles.edit');
-Route::put('/admin/articles/{slug}', [ArticleController::class, 'update'])->name('admin.articles.update');
-Route::delete('/admin/articles/{id}', [ArticleController::class, 'destroy'])->name('admin.articles.destroy');
+// Inscription
+Route::get('/register', [RegisterController::class, 'create'])->name('register');
+Route::post('/register', [RegisterController::class, 'store']);
+
+// Connexion
+Route::get('/login', [LoginController::class, 'showLoginForm'])->name('login');
+Route::post('/login', [LoginController::class, 'login']);
+
+// Déconnexion
+Route::post('/logout', [LoginController::class, 'logout'])->name('logout');
 
 
-// --- ESPACE ADMIN : CATÉGORIES ---
+/*
+|--------------------------------------------------------------------------
+| ROUTES ADMINISTRATION (BACK-OFFICE PROTÉGÉ)
+|--------------------------------------------------------------------------
+*/
 
-// 1. Liste des catégories en admin
-Route::get('/admin/categories', [CategoryController::class, 'adminIndex'])->name('admin.categories.index');
+Route::middleware(['auth', IsAdmin::class])->prefix('admin')->group(function () {
 
-// 2. Formulaire de création + sauvegarde
-Route::get('/admin/categories/creer', [CategoryController::class, 'create'])->name('admin.categories.create');
-Route::post('/admin/categories', [CategoryController::class, 'store'])->name('admin.categories.store');
+    // --- ESPACE ADMIN : ARTICLES ---
+    Route::get('/articles', [ArticleController::class, 'adminIndex'])->name('admin.articles.index');
+    Route::get('/articles/creer', [ArticleController::class, 'create'])->name('admin.articles.create');
+    Route::post('/articles', [ArticleController::class, 'store'])->name('admin.articles.store');
+    Route::get('/articles/{slug}/modifier', [ArticleController::class, 'edit'])->name('admin.articles.edit');
+    Route::put('/articles/{slug}', [ArticleController::class, 'update'])->name('admin.articles.update');
+    Route::delete('/articles/{id}', [ArticleController::class, 'destroy'])->name('admin.articles.destroy');
 
-// 3. Formulaire de modification + sauvegarde
-Route::get('/admin/categories/{category}/modifier', [CategoryController::class, 'edit'])->name('admin.categories.edit');
-Route::put('/admin/categories/{category}', [CategoryController::class, 'update'])->name('admin.categories.update');
+    // --- ESPACE ADMIN : CATÉGORIES ---
+    Route::get('/categories', [CategoryController::class, 'adminIndex'])->name('admin.categories.index');
+    Route::get('/categories/creer', [CategoryController::class, 'create'])->name('admin.categories.create');
+    Route::post('/categories', [CategoryController::class, 'store'])->name('admin.categories.store');
+    Route::get('/categories/{category}/modifier', [CategoryController::class, 'edit'])->name('admin.categories.edit');
+    Route::put('/categories/{category}', [CategoryController::class, 'update'])->name('admin.categories.update');
+    Route::delete('/categories/{category}', [CategoryController::class, 'destroy'])->name('admin.categories.destroy');
 
-// 4. Suppression
-Route::delete('/admin/categories/{category}', [CategoryController::class, 'destroy'])->name('admin.categories.destroy');
+});
