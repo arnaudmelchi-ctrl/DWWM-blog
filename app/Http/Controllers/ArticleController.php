@@ -11,11 +11,35 @@ use Illuminate\Support\Str;
 
 class ArticleController extends Controller
 {
-    public function index()
-    {
-        $articles = Article::with(['category', 'user'])->paginate(1);
-        return view('articles-list', compact('articles'));
+    public function index(Request $request)
+{
+    // 1. Récupération des catégories et des tags pour les filtres
+    $categories = Category::all();
+    $tags = Tag::all();
+
+    // 2. Préparation de la requête sans bloquer sur la casse de 'published'
+    $query = Article::whereRaw('LOWER(status) = ?', ['published'])
+                    ->with(['category', 'user', 'tags'])
+                    ->latest('published_at');
+
+    // 3. Filtre par Catégorie si sélectionnée
+    if ($request->filled('category')) {
+        $query->where('category_id', $request->category);
     }
+
+    // 4. Filtre par Tag si sélectionné
+    if ($request->filled('tag')) {
+        $query->whereHas('tags', function ($q) use ($request) {
+            $q->where('tags.id', $request->tag);
+        });
+    }
+
+    // 5. Pagination avec conservation des paramètres d'URL
+    $articles = $query->paginate(2)->withQueryString();
+
+    // 6. Envoi des données à la vue "articles-list"
+    return view('articles-list', compact('articles', 'categories', 'tags'));
+}
 
     public function adminIndex(): View 
     {
