@@ -41,11 +41,13 @@ class ArticleController extends Controller
     return view('articles-list', compact('articles', 'categories', 'tags'));
 }
 
-    public function adminIndex(): View 
-    {
-        $articles = Article::with(['category', 'user'])->paginate(1);
-        return view('articles-admin-list', compact('articles'));
-    }
+   public function adminIndex(): View 
+{
+    // On charge la catégorie, l'auteur et les tags pour éviter les requêtes N+1 et les nulls
+    $articles = Article::with(['category', 'user', 'tags'])->paginate(10);
+    
+    return view('articles-admin-list', compact('articles'));
+}
 
     public function show(string $slug): View
     {

@@ -37,7 +37,7 @@
             @foreach ($articles as $article)
                 <tr>
                     <td>{{ $article->title }}</td>
-                    <td>{{ $article->category->name }}</td>
+                    <td>{{ $article->category?->name ?? 'Sans catégorie' }}</td>
                     {{-- Correction ici : On compare avec les majuscules PUBLISHED --}}
                     @if ($article->status === 'published')
                         <td><span class="status-badge published">Publié</span></td>
