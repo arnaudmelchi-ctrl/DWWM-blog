@@ -15,7 +15,10 @@
 
     <div class="auth-bar">
         <span>Dashboard admin</span>
-        <a href="#" class="auth-link">Déconnexion</a>
+        <form action="{{ route('logout') }}" method="POST" style="display: inline;">
+            @csrf
+            <button type="submit" class="auth-link" style="background: none; border: none; cursor: pointer; padding: 0;">Déconnexion</button>
+        </form>
     </div>
     
     <div class="admin-header">
@@ -38,7 +41,6 @@
                 <tr>
                     <td>{{ $article->title }}</td>
                     <td>{{ $article->category?->name ?? 'Sans catégorie' }}</td>
-                    {{-- Correction ici : On compare avec les majuscules PUBLISHED --}}
                     @if ($article->status === 'published')
                         <td><span class="status-badge published">Publié</span></td>
                     @else
@@ -54,7 +56,7 @@
                             <button type="submit" class="btn btn-delete" onclick="return confirm('Êtes-vous sûr de vouloir supprimer cet article ?')">❌</button>
                         </form>
                         
-                        <a href="{{ route('articles.show', $article->id) }}" class="btn btn-view">➔</a>
+                        <a href="{{ route('articles.show', $article->slug) }}" class="btn btn-view">➔</a>
                     </td>
                 </tr>
             @endforeach
